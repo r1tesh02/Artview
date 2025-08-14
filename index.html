@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch Gallery with Birds Effect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Goudy+Bookletter+1911&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="vanta-birds-background"></div>
+
+  <div class="gallery-wrap">
+    <img src="images/back button.png" id="backbtn" alt="Back">
+    <div class="gallery">
+      <img src="images/im1.jpg" alt="Artwork 1">
+      <img src="images/im2.jpg" alt="Artwork 2">
+      <img src="images/im3.jpg" alt="Artwork 3">
+      <img src="images/im4.jpg" alt="Artwork 4">
+      <img src="images/im5.jpg" alt="Artwork 5">
+      <img src="images/im6.jpg" alt="Artwork 6">
+      <img src="images/im7.jpg" alt="Artwork 7">
+      <img src="images/im8.jpg" alt="Artwork 8">
+      <img src="images/im9.jpg" alt="Artwork 9">
+      <img src="images/im10.jpg" alt="Artwork 10">
+      <img src="images/im11.jpg" alt="Artwork 11">
+      <img src="images/im12.jpg" alt="Artwork 12">
+      <img src="images/im13.jpg" alt="Artwork 13">
+      <img src="images/im14.jpg" alt="Artwork 14">
+      <img src="images/im15.jpg" alt="Artwork 15">
+      <img src="images/im16.jpg" alt="Artwork 16">
+      <img src="images/im17.jpg" alt="Artwork 17">
+      <img src="images/im18.jpg" alt="Artwork 18">
+    </div>
+    <img src="images/next button.png" id ="nextbtn" alt="Next">
+  </div>
+
+  <div class="quote-container">
+    <p id="quote">"Art speaks where words are unable to explain."</p>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="">
+      <button class="close-btn" id="close-btn">&times;</button>
+    </div>
+  </div>
+
+  <script>
+    // Gallery quote logic remains unchanged
+    const scrollContainer = document.querySelector(".gallery");
+    const nextbtn = document.getElementById("nextbtn");
+    const backbtn = document.getElementById("backbtn");
+    const quoteText = document.getElementById("quote");
+    const quotes = [
+      "Art washes away from the soul the dust of everyday life.",
+      "Art can permeate the very deepest part of us, where no words exist.",
+      "Art is a wound turned into light.",
+      "Art enables us to find ourselves and lose ourselves at the same time.",
+      "Art speaks where words are unable to explain.",
+      "Every artist dips his brush in his own soul, and paints his own nature into his pictures.",
+      "Art is the highest expression of the human spirit.",
+      "When words fail, art speaks.",
+      "The work of the artist is to heal the soul.",
+      "Art is my cure to all this madness, sadness and loss of belonging in the world & through it I'll walk myself home.",
+    ];
+
+    let currentIndex = 0;
+    function updateQuote(delta) {
+      currentIndex = (currentIndex + delta + quotes.length) % quotes.length;
+      quoteText.textContent = `"${quotes[currentIndex]}"`;
+    }
+    
+    scrollContainer.addEventListener("wheel", e => {
+      e.preventDefault();
+      scrollContainer.scrollLeft += e.deltaY;
+      scrollContainer.style.scrollBehavior = "auto";
+    });
+    
+    nextbtn.addEventListener("click", () => {
+      scrollContainer.style.scrollBehavior = "smooth";
+      scrollContainer.scrollLeft += 810;
+      updateQuote(1);
+    });
+    
+    backbtn.addEventListener("click", () => {
+      scrollContainer.style.scrollBehavior = "smooth";
+      scrollContainer.scrollLeft -= 810;
+      updateQuote(-1);
+    });
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.getElementById('close-btn');
+    const galleryImages = document.querySelectorAll('.gallery img');
+
+    // Add click event to all gallery images
+    galleryImages.forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      });
+    });
+
+    // Close lightbox function
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = 'hidden'; // Restore original overflow
+      setTimeout(() => {
+        lightboxImg.src = '';
+      }, 300);
+    }
+
+    // Close button event
+    closeBtn.addEventListener('click', closeLightbox);
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+        closeLightbox();
+      }
+    });
+
+    // Initialize Vanta Birds
+    VANTA.BIRDS({
+      el: "#vanta-birds-background",
+      mouseControls: true,
+      touchControls: true,
+      backgroundColor: 0x1a222c,
+      color1: 0x294372,
+      color2: 0xd1ff,
+      speed: 1.2,
+      quantity: 4.0,
+      birdSize: 0.6,
+      separation: 60.0,
+    });
+  </script>
+</body>
+</html>
