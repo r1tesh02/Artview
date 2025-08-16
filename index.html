@@ -136,6 +136,30 @@
       }
     });
 
+ if (window.innerWidth <= 480) {
+  const images = [...document.querySelectorAll('.gallery img')];
+  let current = 0;
+
+  function scrollToImage(index) {
+    current = Math.max(0, Math.min(images.length - 1, index));
+    images[current].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+  }
+
+  nextbtn.addEventListener('click', () => scrollToImage(current + 1));
+  backbtn.addEventListener('click', () => scrollToImage(current - 1));
+
+  // Update index when user manually scrolls
+  document.querySelector('.gallery').addEventListener('scroll', () => {
+    const index = images.findIndex(img => {
+      const rect = img.getBoundingClientRect();
+      return rect.left >= 0 && rect.right <= window.innerWidth + 1;
+    });
+    if (index !== -1) current = index;
+  });
+}
+
+
+
     // Initialize Vanta Birds
     VANTA.BIRDS({
       el: "#vanta-birds-background",
